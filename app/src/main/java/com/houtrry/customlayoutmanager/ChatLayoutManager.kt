@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
  */
 class ChatLayoutManager : LinearLayoutManager {
 
+    //https://blog.csdn.net/zxt0601/article/details/52956504
     constructor(context: Context?) : super(context)
     constructor(
         context: Context?, orientation: Int,
