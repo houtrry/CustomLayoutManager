@@ -1,5 +1,6 @@
 package com.houtrry.customlayoutmanager
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
@@ -11,20 +12,21 @@ import androidx.recyclerview.widget.RecyclerView
 class ChatAdapter : RecyclerView.Adapter<ChatViewHolder>() {
     private val data :MutableList<String> = ArrayList()
 
-
-    fun setData() {
-
+    fun setData(list: MutableList<String>) {
+        data.clear()
+        data.addAll(list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
+        return ChatViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return if (data.isEmpty()) 0 else data.size
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        holder.textView.text = data[position]
     }
 }

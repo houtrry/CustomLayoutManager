@@ -7,24 +7,23 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
 
-    private val INIT_DATA_COUNT = 10
-    val data = listOf<String>(
-        "第1条数据",
-        "第2条数据",
-        "第3条数据",
-        "第4条数据",
-        "第5条数据",
-        "第6条数据"
-    )
+    private val initSize = 10
+    private val list: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        recyclerView.layoutManager = ChatLayoutManager()
         val adapter = ChatAdapter()
+        adapter.setData(list)
         recyclerView.adapter = adapter
 
-        tvAddData.setOnClickListener {
+        for (index in 0..initSize) {
+            list.add("第${index}条数据")
+        }
 
+        tvAddData.setOnClickListener {
+            list.add("第${list.size}条数据")
         }
     }
 }
