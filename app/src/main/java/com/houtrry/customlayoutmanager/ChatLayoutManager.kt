@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class ChatLayoutManager : RecyclerView.LayoutManager {
 
-    private var firstVisibilityPosition:Int = 0
-    private var lastVisibilityPosition:Int = 0
-    private var verticalOffset:Int = 0
+    private var firstVisibilityPosition: Int = 0
+    private var lastVisibilityPosition: Int = 0
+    private var verticalOffset: Int = 0
 
     constructor() {
 
@@ -34,7 +34,10 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
 //    ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
-        return RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        return RecyclerView.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
@@ -61,6 +64,44 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
     }
 
     private fun fillChild(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
+
+        var offsetY = height
+
+        for (i in 0 until itemCount) {
+
+            var view = recycler.getViewForPosition(i)
+
+            measureChildWithMargins(view, 0, 0)
+
+            val height = getDecoratedMeasuredHeight(view)
+
+            offsetY -= height
+            if (offsetY <= 0) {
+                break
+            }
+        }
+
+        offsetY = if (offsetY > 0) {
+            height - offsetY
+        } else {
+            height
+        }
+
+        for (i in 0 until itemCount) {
+
+            var view = recycler.getViewForPosition(i)
+
+            addView(view)
+
+            measureChildWithMargins(view, 0, 0)
+
+            val width = getDecoratedMeasuredWidth(view)
+            val height = getDecoratedMeasuredHeight(view)
+
+            layoutDecorated(view, 0, offsetY - height, width, offsetY)
+
+            offsetY -= height
+        }
 
     }
 }
