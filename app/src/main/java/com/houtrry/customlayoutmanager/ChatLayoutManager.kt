@@ -55,7 +55,6 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
             return
         }
 
-        detachAndScrapAttachedViews(recycler!!)
 
         firstVisibilityPosition = 0
         lastVisibilityPosition = itemCount
@@ -75,32 +74,16 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
 
     private fun fillChild(recycler: RecyclerView.Recycler, state: RecyclerView.State): Int {
 
-        var offsetY = height - mScrollOffsetY
-        log("===>>>offsetY $offsetY = height: $height - mScrollOffsetY $mScrollOffsetY")
+//        var offsetY = height - mScrollOffsetY
+//        log("===>>>offsetY $offsetY = height: $height - mScrollOffsetY $mScrollOffsetY")
+
+        mTotalHeight = getTotalItemHeight(recycler)
+
+        detachAndScrapAttachedViews(recycler!!)
+
+        var offsetY = if (mTotalHeight > height) height - mScrollOffsetY else mTotalHeight - mScrollOffsetY
 
         var view: View
-        mTotalHeight = 0
-        for (i in 0 until itemCount) {
-
-            view = recycler.getViewForPosition(i)
-
-            measureChildWithMargins(view, 0, 0)
-
-            val height = getDecoratedMeasuredHeight(view)
-
-            offsetY -= height
-//            if (offsetY <= 0) {
-//                break
-//            }
-            mTotalHeight += height
-        }
-
-        offsetY = if (offsetY > 0) {
-            height - offsetY
-        } else {
-            height
-        }
-
         for (i in 0 until itemCount) {
 
             view = recycler.getViewForPosition(i)
@@ -118,6 +101,18 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
 
         }
         return 0
+    }
+
+    private fun getTotalItemHeight(recycler: RecyclerView.Recycler): Int {
+        var totalHeight = 0
+        var view: View
+        for (i in 0 until itemCount) {
+            view = recycler.getViewForPosition(i)
+            measureChildWithMargins(view, 0, 0)
+            val height = getDecoratedMeasuredHeight(view)
+            totalHeight += height
+        }
+        return totalHeight
     }
 
     override fun canScrollVertically(): Boolean {
@@ -138,10 +133,11 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
         if (scrollY > 0) {
             log("===>>>scrollVerticallyBy, 到底了!!!")
             travel = -mScrollOffsetY
-        } else if (scrollY < getSpaceHeight() - mTotalHeight) {
-            travel = mTotalHeight - getSpaceHeight() + mScrollOffsetY
-            log("===>>>scrollVerticallyBy, 到顶了!!!  $travel = $mTotalHeight - ${getSpaceHeight()} + $mScrollOffsetY")
         }
+//        else if (scrollY < getSpaceHeight() - mTotalHeight) {
+//            travel = mTotalHeight - getSpaceHeight() + mScrollOffsetY
+//            log("===>>>scrollVerticallyBy, 到顶了!!!  $travel = $mTotalHeight - ${getSpaceHeight()} + $mScrollOffsetY")
+//        }
 
         log("===>>>scrollVerticallyBy, travel: $travel, scrollY: $scrollY")
 
