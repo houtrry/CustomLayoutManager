@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val initSize = 15
+    private val initSize = 0
     private val list: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
         tvAddData.setOnClickListener {
             list.add("第${list.size}条数据")
+            adapter.setData(list)
+            adapter.notifyDataSetChanged()
         }
 
     }
