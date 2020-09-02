@@ -81,7 +81,8 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
 
         detachAndScrapAttachedViews(recycler!!)
 
-        var offsetY = if (mTotalHeight > height) height - mScrollOffsetY else mTotalHeight - mScrollOffsetY
+        var offsetY =
+            if (mTotalHeight > height) height - mScrollOffsetY else mTotalHeight - mScrollOffsetY
 
         var view: View
         for (i in 0 until itemCount) {
@@ -125,19 +126,19 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
         state: RecyclerView.State?
     ): Int {
         log("===>>>scrollVerticallyBy, dy: $dy, mScrollOffsetY: $mScrollOffsetY, itemCount: $itemCount, childCount: $childCount")
-
-        var travel = dy
-
         val scrollY = mScrollOffsetY + dy
         log("===>>>scrollVerticallyBy, 到顶了吗? ${getSpaceHeight()} - $mTotalHeight = ${getSpaceHeight() - mTotalHeight} --> $scrollY")
-        if (scrollY > 0) {
-            log("===>>>scrollVerticallyBy, 到底了!!!")
-            travel = -mScrollOffsetY
+        var travel = when {
+            scrollY > 0 -> {
+                log("===>>>scrollVerticallyBy, 到底了!!!")
+                -mScrollOffsetY
+            }
+            scrollY <= getSpaceHeight() - mTotalHeight -> {
+                log("===>>>scrollVerticallyBy, 到顶了!!!   ${getSpaceHeight()} -$mTotalHeight - $mScrollOffsetY = ${getSpaceHeight() -mTotalHeight  - mScrollOffsetY} -> $dy")
+                if (getSpaceHeight() < mTotalHeight) (getSpaceHeight() -mTotalHeight  - mScrollOffsetY) else 0
+            }
+            else -> dy
         }
-//        else if (scrollY < getSpaceHeight() - mTotalHeight) {
-//            travel = mTotalHeight - getSpaceHeight() + mScrollOffsetY
-//            log("===>>>scrollVerticallyBy, 到顶了!!!  $travel = $mTotalHeight - ${getSpaceHeight()} + $mScrollOffsetY")
-//        }
 
         log("===>>>scrollVerticallyBy, travel: $travel, scrollY: $scrollY")
 
