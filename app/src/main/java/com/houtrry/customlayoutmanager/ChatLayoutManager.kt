@@ -128,7 +128,7 @@ class ChatLayoutManager : RecyclerView.LayoutManager {
         log("===>>>scrollVerticallyBy, dy: $dy, mScrollOffsetY: $mScrollOffsetY, itemCount: $itemCount, childCount: $childCount")
         val scrollY = mScrollOffsetY + dy
         log("===>>>scrollVerticallyBy, 到顶了吗? ${getSpaceHeight()} - $mTotalHeight = ${getSpaceHeight() - mTotalHeight} --> $scrollY")
-        var travel = when {
+        val travel = when {
             scrollY > 0 -> {
                 log("===>>>scrollVerticallyBy, 到底了!!!")
                 -mScrollOffsetY
